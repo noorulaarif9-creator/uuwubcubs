@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Eyeshuu 💝✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Tamil + romantic fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@500;600;700;800&family=Mukta+Malar:wght@400;500;600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. VARIABLES, THEME & RESET
+           ========================================================================== */
+        :root {
+            --bg-dark: #120524;
+            --bg-gradient-mid: #2A0E4E;
+            --accent-pink: #FF4F81;
+            --accent-rose: #FF1493;
+            --accent-glow: rgba(255, 79, 129, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-main: #FFFFFF;
+            --text-muted: #FFD3E2;
+            --font-tamil: 'Baloo Thambi 2', 'Mukta Malar', sans-serif;
+            --font-body: 'Mukta Malar', 'Baloo Thambi 2', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html { height: -webkit-fill-available; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            position: relative;
+            background: radial-gradient(circle at center, var(--bg-gradient-mid) 0%, var(--bg-dark) 100%) fixed;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ==========================================================================
+           2. GLOBAL EFFECTS
+           ========================================================================== */
+        .loading-screen {
+            position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.6s ease, transform 0.6s ease; padding: 20px;
+        }
+        .loading-screen.fade-out { opacity: 0; pointer-events: none; transform: scale(1.05); }
+        .loader-heart {
+            font-size: clamp(3rem, 10vw, 4rem);
+            animation: heartBeat 1.2s infinite alternate cubic-bezier(0.25, 0.8, 0.25, 1);
+            filter: drop-shadow(0 0 15px var(--accent-pink));
+        }
+
+        .ambient-glow {
+            position: fixed; width: clamp(200px, 50vw, 300px); height: clamp(200px, 50vw, 300px);
+            background: #9D4EDD; border-radius: 50%; pointer-events: none; filter: blur(100px);
+            opacity: 0.3; z-index: 1; transform: translate(-50%, -50%); transition: transform 0.1s ease-out;
+        }
+
+        .particle-container { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+        .floating-heart { position: absolute; bottom: -50px; pointer-events: none; animation: floatUp linear forwards; }
+
+        .music-toggle {
+            position: fixed; top: 15px; right: 15px; width: 44px; height: 44px; border-radius: 50%;
+            border: 1px solid var(--glass-border); background: var(--glass-bg);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 1.2rem;
+        }
+        .music-toggle.playing { animation: spinSlow 4s linear infinite; border-color: var(--accent-pink); box-shadow: 0 0 15px var(--accent-glow); }
+
+        /* ==========================================================================
+           3. CONTAINER & GLASS CARDS
+           ========================================================================== */
+        .app-container {
+            width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            padding: 80px 15px 40px 15px; z-index: 5; position: relative;
+        }
+
+        .page {
+            width: 100%; max-width: 550px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transform: scale(0.92) translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .page.active { opacity: 1 !important; transform: scale(1) translateY(0) !important; }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: clamp(25px, 6vw, 40px) clamp(15px, 4vw, 30px); width: 100%;
+            box-shadow: 0 10px 40px 0 rgba(255, 79, 129, 0.15);
+        }
+
+        /* ==========================================================================
+           4. TYPOGRAPHY & BUTTONS
+           ========================================================================== */
+        .cursive-heading {
+            font-family: 'Great Vibes', var(--font-tamil);
+            color: #FFF; text-align: center; margin-bottom: 15px; letter-spacing: 1px; line-height: 1.25;
+        }
+        .modern-title {
+            font-family: 'Dancing Script', var(--font-tamil); font-weight: 700;
+            background: linear-gradient(135deg, #FFF 30%, #FFB3C6 100%);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .glow-text { filter: drop-shadow(0 0 10px var(--accent-glow)); }
+        .size-lg { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+        .size-xl { font-size: clamp(2.4rem, 9vw, 3.6rem); }
+
+        .tamil-line {
+            font-family: var(--font-tamil); font-weight: 600; text-align: center; color: #FFE3EC;
+            font-size: clamp(1.15rem, 4.2vw, 1.4rem); line-height: 1.7; text-shadow: 0 0 12px rgba(255,79,129,0.55);
+        }
+
+        .sub-text {
+            font-family: var(--font-tamil); font-size: clamp(1.1rem, 4vw, 1.35rem); font-weight: 500;
+            color: var(--text-muted); line-height: 1.7; text-align: center;
+        }
+        .highlight-text { font-family: var(--font-tamil); font-weight: 700; font-size: 1.4rem; color: #FFB3C6; text-align: center; margin: 10px 0; }
+
+        .btn-glow {
+            font-family: var(--font-tamil);
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-rose) 100%);
+            color: #FFF; border: none; border-radius: 50px;
+            padding: clamp(10px, 3vw, 14px) clamp(24px, 6vw, 36px);
+            font-size: clamp(1rem, 3.4vw, 1.1rem); font-weight: 700; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 20, 147, 0.3);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;
+        }
+        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+        .btn-glow:active { transform: scale(0.97); }
+        .btn-outline {
+            font-family: var(--font-tamil); background: rgba(255,255,255,0.08); color: #FFD3E2;
+            border: 1px solid rgba(255, 79, 129, 0.5); border-radius: 50px; padding: 12px 28px;
+            font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all .3s ease;
+        }
+        .btn-outline:hover { background: rgba(255,255,255,0.15); }
+
+        .mt-lg { margin-top: 20px; }
+        .text-center { text-align: center; }
+
+        .img-wrapper {
+            width: clamp(160px, 45vw, 220px); height: clamp(160px, 45vw, 220px); margin: 15px 0;
+            display: flex; justify-content: center; align-items: center;
+            animation: floatUpSlow 4s ease-in-out infinite alternate;
+        }
+        .hero-png { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .input-group {
+            display: flex; background: rgba(0,0,0,0.4); border-radius: 50px; padding: 4px;
+            border: 1px solid rgba(255, 79, 129, 0.3);
+        }
+        .input-group input {
+            background: transparent; border: none; outline: none; padding: 0 15px; color: #FFF;
+            flex-grow: 1; font-size: 1rem; font-family: var(--font-body); min-width: 0;
+        }
+        .input-group input::placeholder { color: rgba(255, 211, 226, 0.6); }
+
+        /* Password hint — always visible */
+        .hint-text {
+            font-family: var(--font-tamil); text-align: center; color: var(--text-muted);
+            margin-top: 14px; font-size: 1.05rem; line-height: 1.6;
+        }
+        .hint-text.error { color: #FF6B9A; animation: shake .4s ease; }
+
+        /* ==========================================================================
+           5. QUIZ & ANSWER SHEET
+           ========================================================================== */
+        .top-progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: rgba(255, 255, 255, 0.05);
+            z-index: 999; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .top-progress-container.visible { opacity: 1; }
+        .top-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #FF1493, var(--accent-pink)); transition: width 0.3s ease; }
+
+        .question-text {
+            font-family: var(--font-tamil); font-size: clamp(1.35rem, 4.8vw, 1.7rem); font-weight: 700;
+            color: #FFF; margin-bottom: 22px; line-height: 1.5; text-align: center;
+        }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .option-btn {
+            font-family: var(--font-body); text-align: left; padding: 14px 20px; border-radius: 15px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #FFF;
+            font-size: 1.05rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; width: 100%;
+        }
+        .option-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--accent-pink); }
+
+        .feedback-overlay, .modal-overlay {
+            position: fixed; inset: 0; background: rgba(10,3,22,0.85);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 5000; display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .feedback-card {
+            background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 30px; text-align: center; max-width: 340px; width: 100%;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: popIn .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .feedback-gif { width: 160px; height: 160px; object-fit: contain; margin: 0 auto 10px; display: block; filter: drop-shadow(0 5px 15px rgba(255,79,129,0.4)); }
+        .feedback-status-text { font-family: var(--font-tamil); font-size: 1.7rem; font-weight: 800; margin-bottom: 15px; color: #7CFFB2; }
+
+        /* Answer sheet */
+        .sheet-note { font-family: var(--font-tamil); color: #FFD3E2; font-size: 1.1rem; line-height: 1.6; margin-bottom: 14px; }
+        .answer-sheet {
+            background: linear-gradient(160deg, #3A1266 0%, #1A0836 100%);
+            border: 1.5px solid rgba(255, 79, 129, 0.5); border-radius: 22px; padding: 22px 16px;
+            text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .sheet-title { font-family: var(--font-tamil); font-size: 1.6rem; font-weight: 800; text-align: center; color: #FFF; margin-bottom: 4px; }
+        .sheet-sub { font-family: var(--font-tamil); text-align: center; color: #FFB3C6; font-size: 1rem; margin-bottom: 16px; }
+        .sheet-item { display: flex; gap: 12px; padding: 12px 0; border-top: 1px dashed rgba(255,255,255,0.18); }
+        .sheet-num {
+            flex: 0 0 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-pink), var(--accent-rose));
+            display: flex; align-items: center; justify-content: center; font-family: var(--font-tamil); font-weight: 800; font-size: .95rem;
+        }
+        .sheet-q { font-family: var(--font-body); font-weight: 600; font-size: 1rem; color: #FFE3EC; line-height: 1.45; }
+        .sheet-a { font-family: var(--font-tamil); font-weight: 700; font-size: 1.08rem; color: #7CFFB2; margin-top: 3px; line-height: 1.4; }
+        .sheet-foot { font-family: 'Dancing Script', var(--font-tamil); text-align: center; font-size: 1.4rem; margin-top: 14px; color: #FFB3C6; border-top: 1px dashed rgba(255,255,255,0.18); padding-top: 12px; }
+        .sheet-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+
+        /* ==========================================================================
+           6. PROPOSAL
+           ========================================================================== */
+        .proposal-container { position: relative; width: 100%; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .proposal-actions { position: relative; display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; min-height: 120px; margin-top: 20px; }
+        #proposal-no {
+            font-family: var(--font-tamil); background: rgba(255, 255, 255, 0.08); color: #FFB3C6;
+            border: 1px solid rgba(255, 79, 129, 0.4); border-radius: 50px; cursor: pointer; z-index: 4000;
+            padding: 10px 30px; font-weight: 700; font-size: 1.05rem;
+            transition: left 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ==========================================================================
+           7. REALISTIC BALLOONS (5)
+           ========================================================================== */
+        .balloon-yard {
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start;
+            gap: 14px 22px; width: 100%; padding: 10px 0 20px;
+        }
+        .balloon-node {
+            position: relative; width: clamp(78px, 22vw, 96px); height: clamp(150px, 40vw, 180px);
+            cursor: pointer; transform-origin: 50% 100%;
+            animation: swingBalloon 3.2s ease-in-out infinite alternate;
+            transition: transform .2s ease;
+        }
+        .balloon-node:nth-child(2n) { animation-duration: 3.8s; animation-delay: -1s; }
+        .balloon-node:nth-child(3n) { animation-duration: 4.4s; animation-delay: -2s; }
+        .balloon-node:active { transform: scale(0.95); }
+
+        .balloon-skin {
+            position: absolute; top: 0; left: 0; width: 100%; height: 76%;
+            border-radius: 50% 50% 48% 48% / 56% 56% 44% 44%;
+            background:
+                radial-gradient(ellipse 22% 16% at 30% 22%, rgba(255,255,255,0.95), rgba(255,255,255,0) 100%),
+                radial-gradient(ellipse 12% 8% at 38% 38%, rgba(255,255,255,0.35), rgba(255,255,255,0) 100%),
+                radial-gradient(circle at 35% 30%, var(--b-light) 0%, var(--b-base) 55%, var(--b-dark) 100%);
+            box-shadow: inset -8px -12px 20px rgba(0,0,0,0.28), inset 4px 6px 12px rgba(255,255,255,0.15), 0 10px 18px rgba(0,0,0,0.35);
+            transition: transform .18s ease-out, opacity .18s ease-out;
+        }
+        /* knot */
+        .balloon-skin::after {
+            content: ''; position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
+            border-bottom: 11px solid var(--b-dark); border-radius: 2px;
+        }
+        /* string */
+        .balloon-string {
+            position: absolute; top: 76%; left: 50%; width: 2px; height: 24%;
+            margin-left: -1px; margin-top: 8px; background: linear-gradient(to bottom, rgba(255,255,255,0.75), rgba(255,255,255,0.15));
+            border-radius: 2px; transform-origin: top center; animation: stringWave 2.4s ease-in-out infinite alternate;
+        }
+        .balloon-node.popping .balloon-skin { transform: scale(1.35); opacity: 0; }
+        .balloon-node.popping .balloon-string { opacity: 0; }
+
+        /* ==========================================================================
+           8. POLAROID (real instant-photo proportions)
+           ========================================================================== */
+        .polaroid-overlay {
+            position: fixed; inset: 0; background: rgba(10, 3, 22, 0.88);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px;
+        }
+        .polaroid-frame {
+            background: #FDFCF8;
+            width: fit-content; max-width: 88vw; padding: 10px 10px 0;
+            border-radius: 3px;
+            box-shadow: 0 25px 55px rgba(0,0,0,0.65), inset 0 0 18px rgba(0,0,0,0.05);
+            transform: rotate(-2.5deg);
+            animation: polaroidDrop .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-sizing: border-box;
+        }
+        .polaroid-img {
+            display: block; width: auto; height: auto;
+            max-width: calc(88vw - 20px); max-height: 55vh;
+            object-fit: contain; background: #1b1b1b;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+        }
+        .polaroid-caption {
+            font-family: 'Dancing Script', var(--font-tamil); color: #2b2b2b;
+            font-size: clamp(0.78rem, 3.2vw, 1rem); font-weight: 600;
+            text-align: center; min-height: 38px; height: auto;
+            line-height: 1.35; display: flex; align-items: center; justify-content: center;
+            padding: 8px 5px 10px; overflow-wrap: anywhere;
+        }
+        @media (max-height: 600px) {
+            .polaroid-img { max-height: 45vh; }
+        }
+
+        /* Letter */
+        .letter-paper {
+            background: #FFFDF3; color: #2F1B1B; border-radius: 20px; padding: 20px;
+            height: clamp(280px, 45vh, 350px); overflow-y: auto;
+            box-shadow: inset 0 0 20px rgba(255,79,129,0.05), 0 10px 20px rgba(0,0,0,0.3); text-align: left;
+        }
+        .letter-text {
+            font-family: 'Dancing Script', var(--font-tamil); font-size: clamp(1.25rem, 4vw, 1.5rem);
+            line-height: 1.5; font-weight: 600; white-space: pre-line; color: #3A1F2D;
+        }
+
+        /* Animations */
+        @keyframes heartBeat { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; } 10% { opacity: 0.6; } 100% { transform: translateY(-105vh) rotate(360deg) scale(1.1); opacity: 0; } }
+        @keyframes floatUpSlow { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes swingBalloon { 0% { transform: rotate(-4deg) translateY(0); } 100% { transform: rotate(4deg) translateY(-8px); } }
+        @keyframes stringWave { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+        @keyframes spinSlow { to { transform: rotate(360deg); } }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes polaroidDrop { 0% { transform: rotate(-12deg) translateY(-60px) scale(0.8); opacity: 0; } 100% { transform: rotate(-2.5deg) translateY(0) scale(1); opacity: 1; } }
+
+        @media (max-width: 400px) {
+            .proposal-actions { flex-direction: column; min-height: 150px; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="top-progress-bar" class="top-progress-container">
+        <div id="top-progress-fill" class="top-progress-fill"></div>
+    </div>
+
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-heart">❤️</div>
+        <p style="margin-top:12px; font-family:var(--font-tamil); font-size:1.4rem; color:var(--text-muted);">Love Loading...</p>
+    </div>
+
+    <div id="ambient-glow" class="ambient-glow"></div>
+    <div id="particle-container" class="particle-container"></div>
+
+    <button id="music-toggle" class="music-toggle" aria-label="Toggle Music"><span id="music-icon">🎀</span></button>
+    <audio id="bg-music" src="assets/bgm-1.m4a" loop preload="auto"></audio>
+    <audio id="pop-sound" src="assets/music/pop.mp3" preload="auto"></audio>
+
+    <!-- QUIZ FEEDBACK POPUP -->
+    <div id="quiz-feedback-popup" class="feedback-overlay hidden">
+        <div class="feedback-card">
+            <img id="feedback-image-slot" src="assets/happy-dudu.gif" class="feedback-gif" alt="Feedback Reaction">
+            <div id="feedback-status" class="feedback-status-text">Perfect! 💖</div>
+            <button id="feedback-continue-btn" class="btn-glow" style="width:100%;">Continue 💕</button>
+        </div>
+    </div>
+
+    <!-- PROPOSAL "YES" POPUP -->
+    <div id="heart-popup" class="modal-overlay hidden">
+        <div class="glass-card text-center" style="max-width: 380px;">
+            <h3 class="cursive-heading size-lg modern-title">Congratulations 🎉💖</h3>
+            <p class="highlight-text">Congratulations! You win my heart 🥹💘🌎</p>
+            <p class="tamil-line">என் இதயம் முழுவதும் உனக்கே, Eyeshuu 💖🫶</p>
+            <button id="to-page-4" class="btn-glow mt-lg">Let’s see how much you know me 😘💌</button>
+        </div>
+    </div>
+
+    <!-- POLAROID MODAL -->
+    <div id="global-polaroid-modal" class="polaroid-overlay hidden">
+        <div id="polaroid-card-target" class="polaroid-frame"></div>
+        <button id="close-polaroid-btn" class="btn-glow mt-lg">Next 💖</button>
+    </div>
+
+    <main class="app-container">
+
+        <!-- PAGE 1: WELCOME -->
+        <section id="page-1" class="page active">
+            <h1 class="cursive-heading glow-text size-lg modern-title">Happy birthday my dear 🫴💖</h1>
+            <p class="tamil-line">Happy birthday my dear 🫴💝✨</p>
+            <div class="img-wrapper"><img src="assets/love-img.png" alt="Welcome" class="hero-png"></div>
+            <div class="glass-card">
+                <div class="input-group">
+                    <input type="password" id="secret-password" placeholder="Enter Password 4444 🔐" autocomplete="off">
+                    <button id="login-btn" class="btn-glow">Enter</button>
+                </div>
+                <p id="password-hint" class="hint-text">💡 Password: 4444 💖</p>
+            </div>
+        </section>
+
+        <!-- PAGE 2: GREETING -->
+        <section id="page-2" class="page hidden">
+            <div class="glass-card text-center">
+                <h2 class="cursive-heading size-lg modern-title">Happy birthday eyeshuu 💝✨</h2>
+                <p class="sub-text mt-lg">உன் ஒவ்வொருநாளும் அமைதியால் நிரம்பி, சிரிப்பு மலர வாழட்டும்; நான் எப்போதும் உன் பக்கத்தில் நின்று, உன்னைக் கவனிக்கும் ஒரு அமைதியான நிழல்போல இருப்பேன். 💖🌷✨</p>
+                <button id="to-page-3" class="btn-glow mt-lg">Next 💖</button>
+            </div>
+        </section>
+
+        <!-- PAGE 3: PROPOSAL -->
+        <section id="page-3" class="page hidden">
+            <div class="proposal-container text-center">
+                <h2 class="cursive-heading size-xl glow-text modern-title">Will u be there for me always??? 💍✨</h2>
+                <p class="tamil-line">என்றென்றும் என் கூடவே இருப்பியா? 🥺</p>
+                <p class="sub-text">உன் கூடவே வாழ ஆசை... ❤️</p>
+                <div class="proposal-actions">
+                    <button id="proposal-yes" class="btn-glow" style="padding:12px 35px;">YES! 💖</button>
+                    <button id="proposal-no">NO 🥺</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: QUIZ + ANSWER SHEET -->
+        <section id="page-4" class="page hidden">
+            <div class="glass-card">
+                <div id="quiz-active-interface">
+                    <h3 id="quiz-question" class="question-text">Loading Love Question...</h3>
+                    <div class="quiz-options">
+                        <button class="option-btn" data-idx="0">Option 1</button>
+                        <button class="option-btn" data-idx="1">Option 2</button>
+                        <button class="option-btn" data-idx="2">Option 3</button>
+                        <button class="option-btn" data-idx="3">Option 4</button>
+                    </div>
+                </div>
+
+                <div id="quiz-score-interface" class="hidden text-center">
+                    <div class="img-wrapper" style="margin: 0 auto 10px;"><img id="score-gif" src="assets/happy.gif" class="hero-png" alt="Happy"></div>
+                    <p class="sheet-note">📸 இந்த Answer Sheet-ஐ Screenshot எடுத்து எனக்கு அனுப்பு 💕</p>
+
+                    <div id="answer-sheet" class="answer-sheet">
+                        <div class="sheet-title">💌 Eyeshuu's Answer Sheet</div>
+                        <div class="sheet-sub">நம்ம காதல் கேள்வி பதில்கள் 💖</div>
+                        <div id="sheet-list"></div>
+                        <div class="sheet-foot">Love you forever, Eyeshuu ❤️🌎</div>
+                    </div>
+
+                    <div class="sheet-actions">
+                        <button id="screenshot-btn" class="btn-glow">📸 Take Screenshot</button>
+                        <button id="to-page-5" class="btn-outline">See Our Memories 🗓️</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: BALLOONS -->
+        <section id="page-5" class="page hidden">
+            <div class="text-center" style="width:100%;">
+                <h2 class="cursive-heading size-lg modern-title" style="margin-bottom:6px;">Pop Balloons to Unlock Memories 🎈💖</h2>
+                <p class="tamil-line" style="margin-bottom:10px;">பலூனை உடைத்து நம் நினைவுகளைப் பார் 💕📸</p>
+                <div id="balloon-yard" class="balloon-yard"></div>
+                <button id="to-page-6" class="btn-glow mt-lg hidden" style="width: 100%;">Read My Heart Letter 💌💖</button>
+            </div>
+        </section>
+
+        <!-- PAGE 6: LETTER -->
+        <section id="page-6" class="page hidden">
+            <div class="glass-card text-center" style="position:relative;">
+                <button id="skip-typewriter" style="position:absolute; top:-45px; right:0; font-family:var(--font-tamil); background:rgba(255,255,255,0.1); border:1px solid var(--glass-border); color:#FFF; padding:6px 14px; border-radius:50px; font-size:0.9rem; cursor:pointer;">Skip</button>
+                <div class="letter-paper" id="letter-scroller">
+                    <div id="typewriter-content" class="letter-text"></div>
+                </div>
+                <button id="loop-back" class="btn-glow mt-lg hidden" style="width:100%;">Restart Journey 🔄</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Quiz: every option gives "Perfect!", so no correct-answer index is needed.
+        const QUIZ_DATA = [
+            { q: "என்னைப் பற்றி உனக்கு பிடித்தது என்ன? 💗", opts: ["A) என் அன்பு ❤️", "B) என் caring 🫶", "C) என் character ✨", "D) எல்லாமே 🥹💖"] },
+            { q: "நான் உன்கிட்ட எப்படி பேசும்போது உனக்கு மிகவும் பிடிக்கும்? 💬", opts: ["A) Romantic-ஆ பேசும்போது 💋", "B) Caring-ஆ பேசும்போது 🫂", "C) Fun-ஆ பேசும்போது 😜", "D) எப்படிப் பேசினாலும் பிடிக்கும் 💝"] },
+            { q: "நம்ம relationship-ஐ நீ எப்படிப் பார்க்கிறாய்? 💑", opts: ["A) ஒரு நல்ல நட்பாக 🤝", "B) ஒரு அழகான காதலாக 💖", "C) ஒரு serious relationship மாதிரி 💍", "D) என் future-ல ஒரு முக்கியமான உறவாக 🌎💙"] },
+            { q: "நான் உன்னை சந்திக்க முடியாம போனால் உனக்கு எப்படி இருக்கும்? 🥺", opts: ["A) கொஞ்சம் miss பண்ணுவேன் 💭", "B) ரொம்ப miss பண்ணுவேன் 🥹", "C) உன்னை பார்க்கணும்னு தோணும் 🫶", "D) ரொம்ப கஷ்டமா இருக்கும் 💔"] },
+            { q: "நான் உனக்கு எவ்வளவு முக்கியம்? 💝", opts: ["A) கொஞ்சம் 🙂", "B) முக்கியம் 💗", "C) ரொம்ப முக்கியம் 🫂", "D) என் வாழ்க்கையில் மிகவும் முக்கியமான ஒருத்தர் 🌎💙"] },
+            { q: "நம்ம இருவரிலும் யாரு அதிகமாக caring? 🥰", opts: ["A) நீ 😘", "B) நான் 💖", "C) இருவரும் சமமா 🫶", "D) நீ தான் அதிகம் 🥹"] },
+            { q: "நம்ம future பற்றி எப்போதாவது நீ நினைச்சிருக்கிறாயா? 🌈", opts: ["A) இல்லை 🙂", "B) கொஞ்சம் 💭", "C) ஆமாம் சில நேரம் 💗", "D) ஆமாம், அடிக்கடி நினைப்பேன் 💍🌎"] },
+            { q: "நான் ஒரு நாள் முழுக்க call அல்லது message பண்ணாம இருந்தா... 📱", opts: ["A) பரவாயில்லை 😌", "B) என்னாச்சு என்று கேட்பேன் 🥺", "C) ரொம்ப miss பண்ணுவேன் 💞", "D) உன்னிடம் பேசாமல் இருக்க முடியாது 🫂💖"] },
+            { q: "என்னுடைய எந்த குணத்தை நீ ஒருபோதும் இழக்கக்கூடாது என்று நினைக்கிறாய்? ✨", opts: ["A) என் அன்பு ❤️", "B) என் caring 🫶", "C) என் honesty 🤍", "D) எல்லாமே 💖"] },
+            { q: "நீ ஒருவரைப் பார்க்கும்போது, என்னை விட சிறப்பாக இருக்கிறார் என்று உனக்குத் தோன்றிய தருணம் இருந்ததா? 💭", opts: ["A) ஆமாம், ஒருசில நேரம் தோன்றியுள்ளது 🙂", "B) ஒருபோதும் இல்லை 💖", "C) சில சமயம் மனதில் வந்து போகிறது 🤔", "D) சொல்ல சிரமமா இருக்கு 🥺"] }
+        ];
+
+        // 5 balloons, each with a light / base / dark shade for a 3D look
+        const MEMORIES_DATA = [
+            { light: "#FF9AB8", base: "#FF2E6E", dark: "#B3123F", img: "assets/img-1.jpg", caption: "என் நிசப்த நிழலில் ஒளியாக நீ. ✨💖" },
+            { light: "#D7B8FF", base: "#9B5DE5", dark: "#5E2CA5", img: "assets/img-2.jpg", caption: "விண்மீன்கள் மத்தியில் நளினமாக சிரிக்கும் உன் முகம். 🌌🥰" },
+            { light: "#8FE3FF", base: "#12B5F0", dark: "#0B6E96", img: "assets/img-3.jpg", caption: "நினைவுகளில் எழுதப்படும் மென் கவிதை போல அந்த தருணம். 📸💌" },
+            { light: "#FFE79A", base: "#FFC21A", dark: "#B58500", img: "assets/img-4.jpg", caption: "உன் பெயர் சொன்னாலே இதயம் மெதுவாகப் புன்னகைக்கிறது. 💓🌷" }
+        ];
+
+        const LOVE_LETTER_TEXT = `என் அன்பான Eyeshuu 💝🌎💙,
+
+உன் பிறந்தநாள் இன்று இனிமையான ஒரு நாளாக மட்டுமல்ல, உன் வாழ்க்கையில் மறக்க முடியாத நாளாக அமையட்டும். இனிய பிறந்தநாள் நல்வாழ்த்துக்கள், என் dear! 🎂🎉💖
+
+உன் முகத்தில் இருக்கும் அழகான சிரிப்பு எப்போதும் மாறாமல் இருக்கட்டும். 😊🌸 நீ நினைக்கும் கனவுகள் எல்லாம் ஒவ்வொன்றாக நனவாகட்டும். ✨🌈 உன் வாழ்க்கை முழுவதும் மகிழ்ச்சியும் நிம்மதியும் நிரம்பி இருக்கட்டும். 🕊️💗
+
+எந்த சூழ்நிலையிலும் உன் பக்கத்தில் நான் இருப்பேன். 🫂❤️ எப்போதும் உன்னை விட்டு போகமாட்டேன்; எப்போதும் உன் கூடவே இருப்பேன். 👫💞 உன் சந்தோஷத்தில் சந்தோஷப்பட்டு, உன் கஷ்டத்தில் துணையாக இருப்பேன். 🤍🫶
+
+நீ எப்போதும் இப்படியே சிரித்துக்கொண்டே இரு. 🥹💖 உனக்குப் பிடித்த எல்லாமும் உன் வாழ்க்கையில் கிடைக்கட்டும். 🎁🌷 உன் ஒவ்வொரு நாளும் அழகான நினைவுகளால் நிறையட்டும். 📸✨ உன் மனசுக்குப் பிடித்த மாதிரி வாழ்க்கை அமையட்டும். 🌎💙
+
+நீ எவ்வளவு தூரம் சென்றாலும், உனக்காக இருக்கும் என் அன்பு என்றும் மாறாது. 💌❤️ இன்றைய நாள் மட்டும் இல்ல, உன் ஒவ்வொரு பிறந்தநாளிலும் உன்னை வாழ்த்த நான் இருக்கணும். 🎂🥰 உன் வாழ்க்கையில் வரும் ஒவ்வொரு புதிய வருடமும் இன்னும் அழகாக அமையட்டும். 🌟💝
+
+உன் சிரிப்பை எப்போதும் பாதுகாத்துக் கொள். 😊🌹 உன் மனசுக்கு எந்த கஷ்டமும் வராமல் சந்தோஷமா இரு. 🫂💗 உன் வாழ்க்கையில் நல்ல விஷயங்கள் மட்டுமே நடக்கட்டும். 🍀✨ உன்னோடு இருக்கும் ஒவ்வொரு தருணமும் எனக்கு அழகான நினைவுதான். 💑📸
+
+எப்போதும் சந்தோஷமாக இரு, என் dear Eyeshuu. நான் எப்போதும் உன் கூடதான். 👫💙💖
+
+Happy Birthdayyyyy, my dear Eyeshuu 🌎💙👫🎂🎉💝🫶😘✨`;
+
+        let activePageIndex = 1;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let typewriterTimer = null;
+
+        const bgMusic = () => document.getElementById('bg-music');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => document.getElementById('loading-screen').classList.add('fade-out'), 1200);
+            startPersistentBackgroundEngines();
+            attachGlobalDOMListeners();
+            setupMouseGlowTracking();
+        });
+
+        /* ---------- MUSIC ---------- */
+        function setMusicUI(isPlaying) {
+            const btn = document.getElementById('music-toggle');
+            const icon = document.getElementById('music-icon');
+            btn.classList.toggle('playing', isPlaying);
+            icon.textContent = isPlaying ? '🎵' : '🔇';
+        }
+
+        function startMusic() {
+            const m = bgMusic();
+            m.volume = 0.6;
+            const p = m.play();
+            if (p !== undefined) p.then(() => setMusicUI(true)).catch(() => setMusicUI(false));
+        }
+
+        function startPersistentBackgroundEngines() {
+            const container = document.getElementById('particle-container');
+            const visualPool = ['❤️', '💖', '✨', '🌸', '🌹'];
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'floating-heart';
+                particle.textContent = visualPool[Math.floor(Math.random() * visualPool.length)];
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.fontSize = (Math.random() * 16 + 14) + 'px';
+                const dur = Math.random() * 4 + 5;
+                particle.style.animationDuration = dur + 's';
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), dur * 1000);
+            }, 400);
+        }
+
+        function setupMouseGlowTracking() {
+            const glow = document.getElementById('ambient-glow');
+            const track = (x, y) => { glow.style.left = x + 'px'; glow.style.top = y + 'px'; };
+            window.addEventListener('mousemove', (e) => track(e.clientX, e.clientY));
+            window.addEventListener('touchmove', (e) => { if (e.touches.length > 0) track(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+        }
+
+        function attachGlobalDOMListeners() {
+            const musicBtn = document.getElementById('music-toggle');
+            musicBtn.addEventListener('click', () => {
+                const m = bgMusic();
+                if (m.paused) startMusic(); else { m.pause(); setMusicUI(false); }
+            });
+
+            // Password -> music starts right here (inside a user click, so browsers allow it)
+            const tryLogin = () => {
+                const input = document.getElementById('secret-password');
+                const hint = document.getElementById('password-hint');
+                if (input.value.trim() === '4444') {
+                    startMusic();
+                    transitionToPage(2);
+                } else {
+                    hint.classList.remove('error'); void hint.offsetWidth; hint.classList.add('error');
+                    input.value = '';
+                }
+            };
+            document.getElementById('login-btn').addEventListener('click', tryLogin);
+            document.getElementById('secret-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+
+            document.getElementById('to-page-3').addEventListener('click', () => transitionToPage(3, setupProposalEngine));
+            document.getElementById('to-page-4').addEventListener('click', () => {
+                document.getElementById('heart-popup').classList.add('hidden');
+                transitionToPage(4, setupQuizEngine);
+            });
+            document.getElementById('to-page-5').addEventListener('click', () => transitionToPage(5, setupMemoriesEngine));
+            document.getElementById('to-page-6').addEventListener('click', () => transitionToPage(6, setupTypewriterEngine));
+            document.getElementById('loop-back').addEventListener('click', () => { clearInterval(typewriterTimer); transitionToPage(1); });
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+        }
+
+        function transitionToPage(targetNum, callback = null) {
+            document.getElementById(`page-${activePageIndex}`).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(`page-${activePageIndex}`).classList.add('hidden');
+                const target = document.getElementById(`page-${targetNum}`);
+                target.classList.remove('hidden');
+                void target.offsetWidth;
+                target.classList.add('active');
+                activePageIndex = targetNum;
+
+                const topBar = document.getElementById('top-progress-bar');
+                topBar.classList.toggle('visible', targetNum === 4);
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (callback) callback();
+            }, 300);
+        }
+
+        /* ==========================================================================
+           PROPOSAL (PAGE 3)
+           ========================================================================== */
+        function setupProposalEngine() {
+            const noBtn = document.getElementById('proposal-no');
+            const yesBtn = document.getElementById('proposal-yes');
+
+            noBtn.style.position = 'relative'; noBtn.style.left = 'auto'; noBtn.style.top = 'auto';
+
+            const shiftTarget = (e) => {
+                const pad = 20;
+                const maxW = window.innerWidth - noBtn.offsetWidth - pad;
+                const maxH = window.innerHeight - noBtn.offsetHeight - pad;
+                const X = Math.max(pad, Math.floor(Math.random() * maxW));
+                const Y = Math.max(pad, Math.floor(Math.random() * maxH));
+                noBtn.style.position = 'fixed'; noBtn.style.left = `${X}px`; noBtn.style.top = `${Y}px`;
+                e.preventDefault(); e.stopPropagation();
+            };
+
+            noBtn.onmouseenter = shiftTarget;
+            noBtn.ontouchstart = shiftTarget;
+
+            yesBtn.onclick = () => {
+                noBtn.style.position = 'static';
+                document.getElementById('heart-popup').classList.remove('hidden');
+                fireworksCelebrationBurst();
+            };
+        }
+
+        /* ==========================================================================
+           QUIZ (PAGE 4) — every option is "Perfect!", answers saved for the sheet
+           ========================================================================== */
+        function setupQuizEngine() {
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            document.getElementById('quiz-active-interface').classList.remove('hidden');
+            document.getElementById('quiz-score-interface').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const data = QUIZ_DATA[currentQuestionIndex];
+            document.getElementById('top-progress-fill').style.width = `${(currentQuestionIndex / QUIZ_DATA.length) * 100}%`;
+            document.getElementById('quiz-question').textContent = `${currentQuestionIndex + 1}. ${data.q}`;
+
+            document.querySelectorAll('.option-btn').forEach((btn, idx) => {
+                btn.textContent = data.opts[idx];
+                btn.onclick = () => handleOptionSelection(idx);
+            });
+        }
+
+        function handleOptionSelection(selectedIdx) {
+            const data = QUIZ_DATA[currentQuestionIndex];
+            userAnswers.push({ q: data.q, a: data.opts[selectedIdx] });
+
+            const popup = document.getElementById('quiz-feedback-popup');
+            document.getElementById('feedback-image-slot').src = "assets/happy-dudu.gif";
+            document.getElementById('feedback-status').textContent = "Perfect! 💖";
+            popup.classList.remove('hidden');
+
+            document.getElementById('feedback-continue-btn').onclick = () => {
+                popup.classList.add('hidden');
+                currentQuestionIndex++;
+                if (currentQuestionIndex < QUIZ_DATA.length) renderQuizQuestion();
+                else renderAnswerSheet();
+            };
+        }
+
+        function renderAnswerSheet() {
+            document.getElementById('top-progress-fill').style.width = '100%';
+            document.getElementById('quiz-active-interface').classList.add('hidden');
+
+            const list = document.getElementById('sheet-list');
+            list.innerHTML = '';
+            userAnswers.forEach((item, i) => {
+                const row = document.createElement('div');
+                row.className = 'sheet-item';
+                const num = document.createElement('div'); num.className = 'sheet-num'; num.textContent = i + 1;
+                const body = document.createElement('div');
+                const q = document.createElement('div'); q.className = 'sheet-q'; q.textContent = item.q;
+                const a = document.createElement('div'); a.className = 'sheet-a'; a.textContent = '💖 ' + item.a;
+                body.appendChild(q); body.appendChild(a);
+                row.appendChild(num); row.appendChild(body);
+                list.appendChild(row);
+            });
+
+            document.getElementById('quiz-score-interface').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            fireworksCelebrationBurst();
+        }
+
+        /* ---------- SCREENSHOT: share to apps (mobile) or download (desktop) ---------- */
+        async function takeScreenshot() {
+            const btn = document.getElementById('screenshot-btn');
+            const original = btn.textContent;
+            btn.textContent = '⏳ Please wait...';
+            try {
+                const canvas = await html2canvas(document.getElementById('answer-sheet'), {
+                    backgroundColor: '#1A0836', scale: 2, useCORS: true
+                });
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], 'thangoo-answer-sheet.png', { type: 'image/png' });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({ files: [file], title: 'My Answer Sheet 💌', text: 'என் Answer Sheet 💕' });
+                            btn.textContent = original; return;
+                        } catch (err) { /* cancelled -> fall back to download */ }
+                    }
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'thangoo-answer-sheet.png';
+                    document.body.appendChild(link); link.click(); link.remove();
+                    btn.textContent = '✅ Saved! Send it to me 💕';
+                    setTimeout(() => { btn.textContent = original; }, 3000);
+                }, 'image/png');
+            } catch (e) {
+                btn.textContent = original;
+                alert('Screenshot error. Phone-ல் manual-ஆ screenshot எடுத்துக்கோ 💕');
+            }
+        }
+
+        /* ==========================================================================
+           BALLOONS + POLAROID (PAGE 5)
+           ========================================================================== */
+        function setupMemoriesEngine() {
+            const yard = document.getElementById('balloon-yard');
+            const footerBtn = document.getElementById('to-page-6');
+            const globalModal = document.getElementById('global-polaroid-modal');
+            const modalTarget = document.getElementById('polaroid-card-target');
+            const closeBtn = document.getElementById('close-polaroid-btn');
+
+            yard.innerHTML = ''; footerBtn.classList.add('hidden');
+            let popped = 0;
+
+            MEMORIES_DATA.forEach((item) => {
+                const node = document.createElement('div'); node.className = 'balloon-node';
+                node.style.setProperty('--b-light', item.light);
+                node.style.setProperty('--b-base', item.base);
+                node.style.setProperty('--b-dark', item.dark);
+
+                const skin = document.createElement('div'); skin.className = 'balloon-skin';
+                const string = document.createElement('div'); string.className = 'balloon-string';
+                node.appendChild(skin); node.appendChild(string); yard.appendChild(node);
+
+                node.addEventListener('click', () => {
+                    const pop = document.getElementById('pop-sound');
+                    pop.currentTime = 0; pop.play().catch(() => {});
+                    node.classList.add('popping');
+                    setTimeout(() => node.classList.add('hidden'), 220);
+
+                    modalTarget.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.className = 'polaroid-img';
+                    img.src = item.img;
+                    img.alt = item.caption;
+                    // Keep each Polaroid proportional to its own image (portrait or landscape).
+                    img.onload = () => {
+                        const maxW = Math.min(window.innerWidth * 0.88 - 20, 340);
+                        const maxH = window.innerHeight * (window.innerHeight < 600 ? 0.45 : 0.55);
+                        const ratio = img.naturalWidth / img.naturalHeight || 1;
+                        let w = maxW, h = w / ratio;
+                        if (h > maxH) { h = maxH; w = h * ratio; }
+                        img.style.width = `${Math.round(w)}px`;
+                        img.style.height = `${Math.round(h)}px`;
+                        modalTarget.style.width = `${Math.round(w + 20)}px`;
+                    };
+                    img.onerror = () => {
+                        img.style.width = 'min(78vw, 280px)';
+                        img.style.height = 'auto';
+                        modalTarget.style.width = 'fit-content';
+                    };
+                    const cap = document.createElement('div');
+                    cap.className = 'polaroid-caption';
+                    cap.textContent = item.caption;
+                    modalTarget.appendChild(img); modalTarget.appendChild(cap);
+                    // restart drop-in animation
+                    modalTarget.style.animation = 'none'; void modalTarget.offsetWidth; modalTarget.style.animation = '';
+                    globalModal.classList.remove('hidden');
+                    popped++;
+                    closeBtn.textContent = (popped === MEMORIES_DATA.length) ? 'Done 💖' : 'Next 💖';
+
+                    closeBtn.onclick = () => {
+                        globalModal.classList.add('hidden');
+                        if (popped === MEMORIES_DATA.length) footerBtn.classList.remove('hidden');
+                    };
+                }, { once: true });
+            });
+        }
+
+        /* ==========================================================================
+           LETTER (PAGE 6)
+           ========================================================================== */
+        function setupTypewriterEngine() {
+            const paper = document.getElementById('typewriter-content');
+            const scroller = document.getElementById('letter-scroller');
+            const skip = document.getElementById('skip-typewriter');
+            const loopBtn = document.getElementById('loop-back');
+
+            paper.textContent = ''; loopBtn.classList.add('hidden'); skip.classList.remove('hidden'); scroller.scrollTop = 0;
+            let ptr = 0; clearInterval(typewriterTimer);
+
+            typewriterTimer = setInterval(() => {
+                if (ptr < LOVE_LETTER_TEXT.length) {
+                    paper.textContent += LOVE_LETTER_TEXT.charAt(ptr); ptr++;
+                    if (ptr % 4 === 0) scroller.scrollTop = scroller.scrollHeight;
+                } else { clearInterval(typewriterTimer); skip.classList.add('hidden'); loopBtn.classList.remove('hidden'); }
+            }, 40);
+
+            skip.onclick = () => {
+                clearInterval(typewriterTimer); paper.textContent = LOVE_LETTER_TEXT;
+                skip.classList.add('hidden'); loopBtn.classList.remove('hidden'); scroller.scrollTop = scroller.scrollHeight;
+            };
+        }
+
+        function fireworksCelebrationBurst() {
+            if (typeof confetti !== 'undefined') {
+                const end = Date.now() + 2000;
+                (function frame() {
+                    confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#FF4F81', '#FF1493'] });
+                    confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#FF4F81', '#FF1493'] });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
+            }
+        }
+    </script>
+</body>
+</html>
